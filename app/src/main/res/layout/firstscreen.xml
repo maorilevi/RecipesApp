@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <RelativeLayout
+            android:layout_width="300dp"
+            android:layout_height="150dp"
+            android:id="@+id/relativeLayout"
+            android:background="@drawable/woodbackground"
+            android:backgroundTintMode="multiply"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="28dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="הכנס מרכיב"
+                android:id="@+id/textView"
+                android:textColor="#ffffffff"
+                android:textSize="25sp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+
+            <EditText
+                android:layout_width="230dp"
+                android:layout_height="40dp"
+                android:id="@+id/ComponentFromUser"
+                android:background="#ffffffff"
+                android:layout_below="@+id/textView"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+            <Button
+                android:layout_width="40dp"
+                android:layout_height="60dp"
+                android:id="@+id/Searche_btn"
+                android:background="@android:drawable/ic_search_category_default"
+                android:backgroundTint="#000000"
+                android:onClick="Move2ResultScreen"
+                android:layout_alignParentBottom="true"
+                android:allowUndo="false"
+                android:layout_toLeftOf="@+id/button4"
+                android:layout_alignLeft="@+id/textView"
+                android:layout_alignStart="@+id/textView" />
+
+            <Button
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="לבחירת קטגוריות"
+                android:id="@+id/CategoriesList"
+                android:onClick="Categoriesmenu"
+                android:textColor="#fffff1fd"
+                android:background="#ff000000"
+                android:textSize="15sp"
+                android:layout_alignBottom="@+id/button4"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/Searche_btn"
+                android:layout_toLeftOf="@+id/textView"
+                android:layout_toStartOf="@+id/textView"
+                android:gravity="center" />
+
+            <Button
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:id="@+id/addComponent_btn"
+                android:background="@android:drawable/ic_input_add"
+                android:backgroundTint="#ffffffff"
+                android:backgroundTintMode="multiply"
+                android:onClick="addcomponent"
+                android:layout_alignBaseline="@+id/ComponentFromUser"
+                android:layout_alignBottom="@+id/ComponentFromUser"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ברשימת המרכיבים"
+                android:id="@+id/button4"
+                android:onClick="ComponentChoose"
+                android:textColor="#fffff1fd"
+                android:background="#ff000000"
+                android:textSize="15sp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_toEndOf="@+id/textView"
+                android:layout_alignTop="@+id/Searche_btn"
+                android:gravity="center" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/woodbackground"
+            android:id="@+id/relativeLayout4"
+            android:layout_below="@+id/relativeLayout"
+            android:layout_alignRight="@+id/relativeLayout"
+            android:layout_alignEnd="@+id/relativeLayout"
+            android:layout_alignLeft="@+id/relativeLayout"
+            android:layout_alignStart="@+id/relativeLayout">
+
+            <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/resultlist"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:fillViewport="false"
+                android:layout_below="@+id/textView10"
+                android:background="@drawable/food">
+
+            </ScrollView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="התחל בחיפוש"
+                android:id="@+id/textView10"
+                android:textStyle="bold"
+                android:textColor="#ffffffff"
+                android:textSize="24sp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:gravity="center" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_below="@+id/relativeLayout4"
+            android:layout_alignLeft="@+id/relativeLayout4"
+            android:layout_alignStart="@+id/relativeLayout4"
+            android:layout_alignRight="@+id/relativeLayout4"
+            android:layout_alignEnd="@+id/relativeLayout4"
+            android:background="@drawable/woodbackground">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="שלושת המתכונים המובילים"
+                android:id="@+id/textView2"
+                android:textStyle="bold"
+                android:textColor="#ffffffff"
+                android:textSize="24sp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:text="מתכון 1"
+                android:id="@+id/button3"
+                android:background="@drawable/plate"
+                android:gravity="bottom|center"
+                android:layout_below="@+id/textView2"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:text="מתכון 1"
+                android:id="@+id/button5"
+                android:background="@drawable/plate"
+                android:gravity="bottom|center"
+                android:layout_toRightOf="@+id/button3"
+                android:layout_toEndOf="@+id/button3"
+                android:layout_alignTop="@+id/button3" />
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:text="מתכון 1"
+                android:id="@+id/button6"
+                android:background="@drawable/plate"
+                android:gravity="bottom|center"
+                android:layout_alignTop="@+id/button5"
+                android:layout_toRightOf="@+id/button5"
+                android:layout_toEndOf="@+id/button5" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</LinearLayout>
