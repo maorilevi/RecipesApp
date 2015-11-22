@@ -6,14 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-
 /**
  * Created by Admin on 28/10/2015.
  */
 public class FirstScreen extends Fragment {
 
-    static protected ArrayList<Recipes> FirstScreenRecArray=new ArrayList<Recipes>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

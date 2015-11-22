@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -31,11 +33,19 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private DrawerLayout drawerLayout;
+
     private ScrollView navList;
     private ScrollView CompList;
     private ScrollView RecList;
+
+    private LinearLayout Layoutcategories;
+    private LinearLayout LayoutComponent;
     private LinearLayout RecLayout;
-    private EditText textView;
+
+    private String ResultCount;
+
+
+    private boolean FirstTime=true;
 
     static protected boolean isclick=true;
 
@@ -47,13 +57,6 @@ public class MainActivity extends AppCompatActivity {
     //Recipe Array
     static protected ArrayList<Recipe> RecArray=new ArrayList<Recipe>();
 
-    static protected ArrayList<String> STR=new ArrayList<String>();
-
-    static protected  String[] STR2=new String[30];
-
-
-    private LinearLayout Layoutcategories;
-    private LinearLayout LayoutComponent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +85,9 @@ public class MainActivity extends AppCompatActivity {
         LayoutComponent = new LinearLayout(this);
         LayoutComponent.setOrientation(LinearLayout.VERTICAL);
         CompList.addView(LayoutComponent);
+
+        //recipes result list
+
 
 
         actionBarDrawerToggle= new ActionBarDrawerToggle(this, drawerLayout,R.string.openbar,R.string.closebar);
@@ -243,6 +249,7 @@ public class MainActivity extends AppCompatActivity {
     }
     //geting all categories
     private void getCategoriesfromparse(){
+
         ParseQuery<ParseObject> CatgeTable = ParseQuery.getQuery("Categories");
         CatgeTable.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -282,6 +289,7 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     }
                                 }
+
                             }
                         });
                         Layoutcategories.addView(btn);
@@ -291,11 +299,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public void Move2ResultScreen(View view) {
-        RecList=(ScrollView)findViewById(R.id.resultlist);
-        RecLayout=new LinearLayout(this);
-        RecLayout.setOrientation(LinearLayout.VERTICAL);
-        RecList.addView(RecLayout);
+        if(FirstTime){
+            RecList = (ScrollView) findViewById(R.id.resultlist);
+            RecLayout = new LinearLayout(this);
+            RecLayout.setOrientation(LinearLayout.VERTICAL);
+            RecList.addView(RecLayout);
+        }
         RecLayout.removeAllViews();
+        FirstTime=false;
         int CatCounter = 0;
         //create string array for components and Categories
         for (int indx = 0; indx < catArray.size(); indx++) {
@@ -312,42 +323,142 @@ public class MainActivity extends AppCompatActivity {
         String[] CompArray_STR = new String[compArray.size()];
         for (int indx = 0; indx < compArray.size(); indx++) {
             CompArray_STR[indx] = (compArray.get(indx).getCompID());
+            Toast.makeText(getApplication(),CompArray_STR[indx],Toast.LENGTH_SHORT).show();
         }
-        ParseQuery<ParseObject> Rec_Comp_TABLE = ParseQuery.getQuery("Rec_Comp");
-        Rec_Comp_TABLE.whereContainedIn("CompID", Arrays.asList(CompArray_STR));
-        ParseQuery<ParseObject> Rec_Cat_TABLE = ParseQuery.getQuery("Rec_Cat");
-        Rec_Cat_TABLE.whereContainedIn("CatId", Arrays.asList(CatArray_STR));
-        Rec_Cat_TABLE.whereMatchesKeyInQuery("RecId", "RecId", Rec_Comp_TABLE);
-        ParseQuery<ParseObject> Rec_TABLE = ParseQuery.getQuery("Recipes");
-        Rec_TABLE.whereMatchesKeyInQuery("objectId", "RecId", Rec_Comp_TABLE);
-        Rec_TABLE.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> results2, ParseException e3) {
-                if (e3 == null) {
-                    if (results2.size() > 0) {
-                        for (int indx = 0; indx < results2.size(); indx++) {
-                            Button btn=new Button(MainActivity.this);
-                            btn.setText(results2.get(indx).getString("Name"));
-                            RecLayout.addView(btn);
+
+
+        //in case the search is by components and category
+        if(CompArray_STR.length>0&&CatArray_STR.length>0) {
+            Toast.makeText(getApplication(),"A123",Toast.LENGTH_SHORT).show();
+            ParseQuery<ParseObject> Rec_Cat_TABLE = ParseQuery.getQuery("Rec_Cat");
+            Rec_Cat_TABLE.whereContainedIn("CatId", Arrays.asList(CatArray_STR));
+
+            ParseQuery<ParseObject> Rec_Comp_TABLE = ParseQuery.getQuery("Rec_Comp");
+            Rec_Comp_TABLE.whereContainedIn("CompID", Arrays.asList(CompArray_STR));
+            Rec_Comp_TABLE.whereMatchesKeyInQuery("RecId", "RecId", Rec_Cat_TABLE);
+            ParseQuery<ParseObject> Rec_TABLE = ParseQuery.getQuery("Recipes");
+            Rec_TABLE.whereMatchesKeyInQuery("objectId", "RecId", Rec_Comp_TABLE);
+            Rec_TABLE.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> results2, ParseException e3) {
+                    if (e3 == null) {
+                        ResultCount = Integer.toString(results2.size());
+                        ((TextView) findViewById(R.id.ResultCounter)).setText(" נמצאו" + ResultCount + "מתכונים ");
+                        if (results2.size() > 0) {
+                            for (int indx = 0; indx < results2.size(); indx++) {
+
+                                setdetails(results2.get(indx).getString("Name"),
+                                        "חצי שעה", "חצי שעה",
+                                        results2.get(indx).getString("Comps_Str"),
+                                        "10", "12",
+                                        results2.get(indx).getString("Rec_str"),
+                                        indx);
+                            }
+                        } else {
+                            AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                            alertDialog.setCanceledOnTouchOutside(false);
+                            alertDialog.setMessage("לא נמצאו מתכונים מתאימים");
+                            alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+                            alertDialog.show();
                         }
                     } else {
-                        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
-                        alertDialog.setCanceledOnTouchOutside(false);
-                        alertDialog.setMessage("לא נמצאו מתכונים מתאימים");
-                        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        });
-                        alertDialog.show();
                     }
-                } else {
                 }
-            }
-        });
+            });
+        }else//in case the search is only by category
+            if(CatArray_STR.length>0&&CompArray_STR.length==0) {
+                Toast.makeText(getApplication(),"B123",Toast.LENGTH_SHORT).show();
+                ParseQuery<ParseObject> Rec_Cat_TABLE = ParseQuery.getQuery("Rec_Cat");
+                Rec_Cat_TABLE.whereContainedIn("CatId", Arrays.asList(CatArray_STR));
+                ParseQuery<ParseObject> Rec_TABLE = ParseQuery.getQuery("Recipes");
+                Rec_TABLE.whereMatchesKeyInQuery("objectId", "RecId", Rec_Cat_TABLE);
+                Rec_TABLE.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> list, ParseException e) {
+                        if (e == null) {
+                            ResultCount = Integer.toString(list.size());
+                            ((TextView) findViewById(R.id.ResultCounter)).setText(" נמצאו" + ResultCount + "מתכונים ");
+                            if (list.size() > 0) {
+                                for (int indx = 0; indx < list.size(); indx++) {
+
+                                    setdetails(list.get(indx).getString("Name"),
+                                            "חצי שעה", "חצי שעה",
+                                            list.get(indx).getString("Comps_Str"),
+                                            "10", "12",
+                                            list.get(indx).getString("Rec_str"),
+                                            indx);
+                                }
+                            } else {
+                                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                                alertDialog.setCanceledOnTouchOutside(false);
+                                alertDialog.setMessage("לא נמצאו מתכונים מתאימים");
+                                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                });
+                                alertDialog.show();
+                            }
+                        } else {
+                        }
+                    }
+                });
+            }else//in case the search is only by Components
+                if(CompArray_STR.length>0&&CatArray_STR.length==0){
+                    Toast.makeText(getApplication(),"C123",Toast.LENGTH_SHORT).show();
+                    ParseQuery<ParseObject> Rec_Cat_TABLE = ParseQuery.getQuery("Rec_Comp");
+                    Rec_Cat_TABLE.whereContainedIn("CompID", Arrays.asList(CompArray_STR));
+                    ParseQuery<ParseObject> Rec_TABLE = ParseQuery.getQuery("Recipes");
+                    Rec_TABLE.whereMatchesKeyInQuery("objectId", "RecId", Rec_Cat_TABLE);
+                    Rec_TABLE.findInBackground(new FindCallback<ParseObject>() {
+                        @Override
+                        public void done(List<ParseObject> list, ParseException e) {
+                            if (e == null) {
+                                //set result counter in text view on screen
+                                ResultCount = Integer.toString(list.size());
+                                ((TextView) findViewById(R.id.ResultCounter)).setText(" נמצאו" + ResultCount + "מתכונים ");
+                                if (list.size() > 0) {
+                                    for (int indx = 0; indx < list.size(); indx++) {
+
+                                        setdetails(list.get(indx).getString("Name"),
+                                                "חצי שעה", "חצי שעה",
+                                                list.get(indx).getString("Comps_Str"),
+                                                "10", "12",
+                                                list.get(indx).getString("Rec_str"),
+                                                indx);
+                                    }
+                                } else {
+                                    AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                                    alertDialog.setCanceledOnTouchOutside(false);
+                                    alertDialog.setMessage("לא נמצאו מתכונים מתאימים");
+                                    alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                        }
+                                    });
+                                    alertDialog.show();
+                                }
+                            } else {
+                            }
+                        }
+                    });
+                }
+        else{//in this case user not type nothing and not choose category
+                    AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                    alertDialog.setCanceledOnTouchOutside(false);
+                    alertDialog.setMessage("לא הוכנסו מרכבים ולא נבחרו קטגוריות אנה בדוק ונסה שנית");
+                    alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            ((TextView) findViewById(R.id.ResultCounter)).setText("נמצאו 0 תוצאות");
+                        }
+                    });
+                    alertDialog.show();
+                }
     }
     public void Change2WhitingScreen(){
         Fragment newfragment;
-        newfragment = new FlashScreen_Add_Component();
+        newfragment = new FlashScreen();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.fragmentholder, newfragment);
         transaction.addToBackStack(null);
@@ -362,4 +473,71 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+    public void setdetails(String recName,String worktime,String prepartime,String RecComp,
+                           String like,String unlike,String RecSTR, final int indx){
+        //add the recipe details to result list
+
+        //Main layout
+        final LinearLayout MainLayout=new LinearLayout(MainActivity.this);
+        MainLayout.setOrientation(LinearLayout.HORIZONTAL);
+        //like
+        LinearLayout likelayout=new LinearLayout(MainActivity.this);
+        likelayout.setOrientation(LinearLayout.VERTICAL);
+        Button likebtn=new Button(MainActivity.this);
+        likebtn.setBackgroundResource(R.drawable.like);
+        TextView likecounter=new TextView(MainActivity.this);
+        likecounter.setText(like);
+        likecounter.setTextColor(Color.WHITE);
+        likecounter.setBackgroundColor(Color.BLACK);
+        likelayout.addView(likecounter);
+        likelayout.addView(likebtn);
+        likelayout.setLayoutParams(new LinearLayout.LayoutParams(150, 300));
+        //unlike
+        LinearLayout unlikelayout=new LinearLayout(MainActivity.this);
+        unlikelayout.setOrientation(LinearLayout.VERTICAL);
+        Button unlikebtn=new Button(MainActivity.this);
+        unlikebtn.setBackgroundResource(R.drawable.unlike);
+        TextView unlikecounter=new TextView(MainActivity.this);
+        unlikecounter.setText(unlike);
+        unlikecounter.setTextColor(Color.WHITE);
+        unlikecounter.setBackgroundColor(Color.BLACK);
+        unlikelayout.addView(unlikecounter);
+        unlikelayout.addView(unlikebtn);
+        unlikelayout.setLayoutParams(new LinearLayout.LayoutParams(150, 300));
+        //set like and unlike in layout
+        MainLayout.addView(likelayout);
+        //image and name details
+        LinearLayout ImageAndNameLayout=new LinearLayout(MainActivity.this);
+        ImageAndNameLayout.setOrientation(LinearLayout.VERTICAL);
+        Button btnImagerecipe=new Button(MainActivity.this);
+        btnImagerecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,Recipe_Screen.class);
+                startActivity(intent);
+                Recipe_Screen.RecIndex=indx;
+            }
+        });
+        btnImagerecipe.setBackgroundResource(R.drawable.plate);
+        Button RecName=new Button(MainActivity.this);
+        RecName.setText(recName);
+        RecName.setBackgroundColor(Color.BLACK);
+        RecName.setTextColor(Color.WHITE);
+        ImageAndNameLayout.addView(RecName);
+        ImageAndNameLayout.addView(btnImagerecipe);
+        ImageAndNameLayout.setLayoutParams(new LinearLayout.LayoutParams(650, 600));
+        MainLayout.addView(ImageAndNameLayout);
+        MainLayout.addView(unlikelayout);
+        MainLayout.setLayoutParams(new LinearLayout.LayoutParams(950, 600));
+        RecLayout.addView(MainLayout);
+
+        //save recipe details in recipe array
+        Recipe recipe = new Recipe();
+        recipe.setRecName(recName);
+        recipe.setRecSTR(RecSTR);
+        recipe.setRec_Comp(RecComp);
+        recipe.setWorkTime(worktime);
+        recipe.setPreparTime(prepartime);
+        RecArray.add(recipe);
+    }
 }

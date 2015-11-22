@@ -7,29 +7,43 @@ import android.graphics.Bitmap;
  */
 public class Recipe {
 
-    private String recName;
+    private String RecName;
+
+    private String Rec_Comp;
     private String RecSTR;
-    private String worktime;
-    private String prepartime;
+    private String WorkTime;
+    private String PreparTime;
     private String like;//like recipe counter
     private String unlike;//unlike recipe counter
-    private Bitmap recImeg;
+    private Bitmap RecImeg;
     protected boolean side;
 
 
+    //constructors
     public Recipe(){
     }
-    public Recipe(String recName,String worktime,String prepartime,
+    public Recipe(String recName,String worktime,String prepartime,String RecComp,
                   String like,String unlike,Bitmap recImeg,String RecSTR) {
-        this.recName = recName;
-        this.recImeg = recImeg;
-        this.worktime=worktime;
-        this.prepartime=prepartime;
+        this.RecName = recName;
+        this.RecImeg = recImeg;
+        this.Rec_Comp=RecComp;
+        this.WorkTime =worktime;
+        this.PreparTime =prepartime;
         this.like=like;
         this.unlike=unlike;
         this.side = true;
         this.RecSTR=RecSTR;
     }
+    public Recipe(Object p0) {
+    }
+    public Recipe(String recName){
+        super();
+        this.side=true;
+        this.RecName = recName;
+    }
+
+
+
     //getter and setter
     public void setLike(String like) {
         this.like = like;
@@ -43,23 +57,23 @@ public class Recipe {
     public String getLike() {
         return like;
     }
-    public String getWorktime() {
-        return worktime;
+    public String getWorkTime() {
+        return WorkTime;
     }
-    public void setWorktime(String worktime) {
-        this.worktime = worktime;
+    public void setWorkTime(String workTime) {
+        this.WorkTime = workTime;
     }
-    public String getPrepartime() {
-        return prepartime;
+    public String getPreparTime() {
+        return PreparTime;
     }
-    public void setPrepartime(String prepartime) {
-        this.prepartime = prepartime;
+    public void setPreparTime(String preparTime) {
+        this.PreparTime = preparTime;
     }
     public Bitmap getRecImeg() {
-        return recImeg;
+        return RecImeg;
     }
     public void setRecImeg(Bitmap recImeg) {
-        this.recImeg = recImeg;
+        this.RecImeg = recImeg;
     }
     public boolean isSide() {
         return side;
@@ -68,10 +82,10 @@ public class Recipe {
         this.side = side;
     }
     public String getRecName() {
-        return recName;
+        return RecName;
     }
     public void setRecName(String recName) {
-        this.recName = recName;
+        this.RecName = recName;
     }
     public String getRecSTR() {
         return RecSTR;
@@ -79,13 +93,12 @@ public class Recipe {
     public void setRecSTR(String recSTR) {
         RecSTR = recSTR;
     }
+    public String getRec_Comp() {
+        return Rec_Comp;
+    }
+    public void setRec_Comp(String rec_Comp) {
+        Rec_Comp = rec_Comp;
+    }
 
 
-    public Recipe(Object p0) {
-    }
-    public Recipe(String recName){
-        super();
-        this.side=true;
-        this.recName = recName;
-    }
 }

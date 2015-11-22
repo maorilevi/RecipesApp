@@ -7,14 +7,17 @@
         android:layout_height="fill_parent">
 
         <RelativeLayout
-            android:layout_width="300dp"
+            android:layout_width="350dp"
             android:layout_height="150dp"
             android:id="@+id/relativeLayout"
             android:background="@drawable/woodbackground"
             android:backgroundTintMode="multiply"
+            android:longClickable="false"
+            android:elevation="@dimen/abc_action_bar_stacked_tab_max_width"
+            android:layout_marginTop="39dp"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="28dp">
+            android:layout_alignLeft="@+id/relativeLayout4"
+            android:layout_alignStart="@+id/relativeLayout4">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -32,8 +35,7 @@
                 android:id="@+id/ComponentFromUser"
                 android:background="#ffffffff"
                 android:layout_below="@+id/textView"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_centerHorizontal="true" />
 
             <Button
                 android:layout_width="40dp"
@@ -97,24 +99,23 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="200dp"
+            android:layout_width="350dp"
+            android:layout_height="300dp"
             android:background="@drawable/woodbackground"
             android:id="@+id/relativeLayout4"
+            android:longClickable="false"
+            android:elevation="@dimen/abc_action_bar_stacked_tab_max_width"
             android:layout_below="@+id/relativeLayout"
-            android:layout_alignRight="@+id/relativeLayout"
-            android:layout_alignEnd="@+id/relativeLayout"
-            android:layout_alignLeft="@+id/relativeLayout"
-            android:layout_alignStart="@+id/relativeLayout">
+            android:layout_alignLeft="@+id/relativeLayout5"
+            android:layout_alignStart="@+id/relativeLayout5">
 
             <ScrollView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/resultlist"
                 android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"
                 android:fillViewport="false"
-                android:layout_below="@+id/textView10"
+                android:layout_below="@+id/ResultCounter"
                 android:background="@drawable/food">
 
             </ScrollView>
@@ -123,7 +124,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="התחל בחיפוש"
-                android:id="@+id/textView10"
+                android:id="@+id/ResultCounter"
                 android:textStyle="bold"
                 android:textColor="#ffffffff"
                 android:textSize="24sp"
@@ -135,59 +136,70 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_width="350dp"
+            android:layout_height="100dp"
+            android:background="@drawable/woodbackground"
+            android:id="@+id/relativeLayout5"
+            android:longClickable="false"
+            android:elevation="@dimen/abc_action_bar_stacked_tab_max_width"
+            android:focusableInTouchMode="false"
             android:layout_below="@+id/relativeLayout4"
-            android:layout_alignLeft="@+id/relativeLayout4"
-            android:layout_alignStart="@+id/relativeLayout4"
-            android:layout_alignRight="@+id/relativeLayout4"
-            android:layout_alignEnd="@+id/relativeLayout4"
-            android:background="@drawable/woodbackground">
+            android:layout_centerHorizontal="true">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
                 android:text="שלושת המתכונים המובילים"
-                android:id="@+id/textView2"
+                android:id="@+id/textView11"
                 android:textStyle="bold"
                 android:textColor="#ffffffff"
-                android:textSize="24sp"
+                android:textSize="20sp"
+                android:gravity="center"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true" />
 
-            <Button
-                android:layout_width="100dp"
+            <ScrollView
+                android:layout_width="200dp"
                 android:layout_height="100dp"
-                android:text="מתכון 1"
-                android:id="@+id/button3"
-                android:background="@drawable/plate"
-                android:gravity="bottom|center"
-                android:layout_below="@+id/textView2"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:id="@+id/scrollView"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/textView11"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true">
 
-            <Button
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:text="מתכון 1"
-                android:id="@+id/button5"
-                android:background="@drawable/plate"
-                android:gravity="bottom|center"
-                android:layout_toRightOf="@+id/button3"
-                android:layout_toEndOf="@+id/button3"
-                android:layout_alignTop="@+id/button3" />
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
 
-            <Button
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:text="מתכון 1"
-                android:id="@+id/button6"
-                android:background="@drawable/plate"
-                android:gravity="bottom|center"
-                android:layout_alignTop="@+id/button5"
-                android:layout_toRightOf="@+id/button5"
-                android:layout_toEndOf="@+id/button5" />
+                    <Button
+                        android:layout_width="150dp"
+                        android:layout_height="100dp"
+                        android:text="New Button"
+                        android:id="@+id/button3"
+                        android:gravity="top|center"
+                        android:background="@drawable/plate" />
+
+                    <Button
+                        android:layout_width="150dp"
+                        android:layout_height="100dp"
+                        android:text="New Button"
+                        android:id="@+id/button5"
+                        android:gravity="top|center"
+                        android:background="@drawable/plate" />
+
+                    <Button
+                        android:layout_width="150dp"
+                        android:layout_height="100dp"
+                        android:text="New Button"
+                        android:id="@+id/button6"
+                        android:gravity="top|center"
+                        android:background="@drawable/plate" />
+                </LinearLayout>
+            </ScrollView>
 
         </RelativeLayout>
 

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 /**
  * Created by Admin on 17/11/2015.
  */
-public class FlashScreen_Add_Component extends Fragment {
+public class FlashScreen extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -5,5 +5,6 @@
     <string name="closebar">Close</string>
     <string name="receipe">RCP</string>
     <string name="title_activity_main_activity2">MainActivity2Activity</string>
+    <string name="title_activity_recipe__screen">Recipe_Screen</string>
 
 </resources>
